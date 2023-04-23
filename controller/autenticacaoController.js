@@ -1,5 +1,6 @@
 const database = require('../database/database')
 const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken")
 
 
 function login(req, res) {
@@ -7,11 +8,18 @@ function login(req, res) {
 	database.select('*').from('usuarios').where('email', email)
 	.then(usuario => {
 		if (usuario.length !== 0) {
-			const senhaHash = usuario[0]['senha']
+			const { id, email, senha: senhaHash, token: tokenBanco, token_expira_em } = usuario[0]
 			const senhaValida = bcrypt.compareSync(senha, senhaHash)
 			if (senhaValida) {
-				// se usuario tiver um token verificar se faz mais de uma hora e gerar outro
-				// se não tiver um token criar e inserir no banco junto com a hora 	
+				if (tokenBanco && (Date.now() <= token_expira_em)) {
+					res.status(200).json({token: tokenBanco})
+				} else {
+					token = jwt.sign({ id, email }, "chaveSecreta", { expiresIn: "1h" })
+					const novaData = new Date(Date.now() + (60 * 60 * 1000))
+					database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
+					.then(retorno => res.status(200).json({msg: 'Token gerado com sucesso', token}))
+					.catch(err => res.status(500).json({msg: 'Houve um problema ao gerar seu token'}))
+				}
 			} else{
 				res.status(400).json({msg: 'A senha está incorreta'})
 			}
