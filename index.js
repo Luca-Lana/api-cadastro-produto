@@ -8,8 +8,10 @@ app.use(express.json())
 
 // ROTAS 
 const produtosRoute = require('./routes/produtosRoute')
+const autenticacaoRoute = require('./routes/autenticacaoRoute')
 
 app.use(produtosRoute)
+app.use(autenticacaoRoute)
 
 
 app.listen(8080, () => {
