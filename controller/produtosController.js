@@ -36,6 +36,7 @@ function getId(req, res) {
 
 function post(req, res) {
 	let { nome, marca, preco } = req.body
+
 	if (!nome || !marca || !preco) {
 		res.status(400).json({msg: 'Sua requisição está faltando dados'})
 	} else {
@@ -50,7 +51,8 @@ function post(req, res) {
 }
 
 function putId(req, res) {
-		let { id } = req.params
+	let { id } = req.params
+
 	if (isNaN(id)) {
 		res.status(400).json({msg: 'Parametro inválido'})
 	} else {
@@ -75,6 +77,7 @@ function putId(req, res) {
 
 function deleteId(req, res) {
 	let { id } = req.params
+	
 	if (isNaN(id)) {
 		res.status(400).json({msg: 'Parametro inválido'})
 	} else {
