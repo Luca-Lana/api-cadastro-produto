@@ -1,35 +1,14 @@
 const express = require('express')
 const router = express.Router()
+const produtosController = require('../controller/produtosController')
 
-router.get('/produtos', (req, res) => {
-	res.send('Opa')
-})
+router.get('/produtos', produtosController.get)
+router.get('/produtos/:id', produtosController.getId)
 
-router.get('/produtos/:id', (req, res) => {
-	let { id } = req.params
-    res.send('Ops' + id)
-})
+router.post('/produtos', produtosController.post)
 
-router.post('/produtos', (req, res) => { 
-	let dados = { ...req.body }
-	res.send(dados)
-})
+router.put('/produtos/:id', produtosController.putId)
 
-router.patch('/produtos/:id', (req, res) => {
-	let { id } = req.params
-	let dados = { ...req.body }
-	res.send({id, dados})
-})
-
-router.put('/produtos/:id', (req, res) => {
-	let { id } = req.params
-	let dados = { ...req.body }
-	res.send({id, dados})
-})
-
-router.delete('/produtos/:id', (req, res) => {
-	let { id } = req.params
-	res.send(id)
-})
+router.delete('/produtos/:id', produtosController.deleteId)
 
 module.exports = router
