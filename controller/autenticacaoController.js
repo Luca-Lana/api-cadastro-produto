@@ -14,7 +14,7 @@ function login(req, res) {
 				if (tokenBanco && (Date.now() <= token_expira_em)) {
 					res.status(200).json({token: tokenBanco})
 				} else {
-					token = jwt.sign({ id, email }, "chaveSecreta", { expiresIn: "1h" })
+					token = jwt.sign({ id, email }, 'chaveSecreta', { expiresIn: '1h' })
 					const novaData = new Date(Date.now() + (60 * 60 * 1000))
 					database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
 					.then(retorno => res.status(200).json({msg: 'Token gerado com sucesso', token}))

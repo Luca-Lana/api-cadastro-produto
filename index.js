@@ -10,8 +10,14 @@ app.use(express.json())
 const produtosRoute = require('./routes/produtosRoute')
 const autenticacaoRoute = require('./routes/autenticacaoRoute')
 
-app.use(produtosRoute)
+//MIDDLEWARE
+const jwtAutenticacao = require('./middleware/jwtAutenticacao')
+
 app.use(autenticacaoRoute)
+
+app.use(jwtAutenticacao)
+
+app.use(produtosRoute)
 
 
 app.listen(8080, () => {
