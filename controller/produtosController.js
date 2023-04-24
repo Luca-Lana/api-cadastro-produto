@@ -10,24 +10,21 @@ async function get(req, res) {
 	}	
 }
 
-function getId(req, res) {
+async function getId(req, res) {
 	let { id } = req.params
-
 	if (isNaN(id)) {
 		res.status(400).json({msg: 'Parametro inválido'})
 	} else {
-		database.select('*').from('produtos').where('id', id)
-		.then(produto => {
+		try {
+			let produto = await database.select('*').from('produtos').where('id', id)
 			if (produto.length !== 0) {
 				res.status(200).json({dados: produto})
 			} else {
 				res.status(404).json({msg: 'Esse produto não existe'})
 			}
-		})
-		.catch(err => {
+		} catch (erro) {
 			res.status(500).json({msg: 'Houve um problema ao buscar o produto'})
-			console.log(err)
-		})
+		}
 	}
 }
 
