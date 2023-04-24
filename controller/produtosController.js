@@ -28,25 +28,25 @@ async function getId(req, res) {
 	}
 }
 
-function post(req, res) {
+async function post(req, res) {
 	let { nome, marca, preco } = req.body
-
 	if (!nome || !marca || !preco) {
 		res.status(400).json({msg: 'Sua requisição está faltando dados'})
 	} else {
-		database.insert({nome, marca, preco}).into('produtos')
-		.then(retorno => {
-			res.status(201).json({msg: 'Produto inserido com sucesso'})
-		})
-		.catch(err => {
+		try {
+			let retorno = await database.insert({nome, marca, preco}).into('produtos')
+			console.log(retorno)
+			if (retorno.length !== 0) {
+				res.status(201).json({msg: 'Produto inserido com sucesso'})
+			}
+		} catch (erro) {
 			res.status(500).json({msg: 'Houve um problema ao salvar o produto'})
-		})
+		}
 	}
 }
 
-function putId(req, res) {
+async function putId(req, res) {
 	let { id } = req.params
-
 	if (isNaN(id)) {
 		res.status(400).json({msg: 'Parametro inválido'})
 	} else {
@@ -54,17 +54,16 @@ function putId(req, res) {
 		if (!nome && !preco && !marca) {
 			res.status(400).json({msg: 'Sua requisição está faltando dados'})
 		} else {
-			database('produtos').where('id', id).update({nome, marca, preco})
-			.then(retorno => {
+			try {
+				let retorno = await database('produtos').where('id', id).update({nome, marca, preco})
 				if (retorno !== 0) {
 					res.status(200).json({msg: 'Produto alterado com sucesso'})
 				} else {
 					res.status(404).json({msg: 'Esse produto não existe'})
 				}
-			})
-			.catch(err => {
+			} catch (erro) {
 				res.status(500).json({msg: 'Houve um problema ao atualizar o produto'})
-			})
+			}
 		}
 	}
 }

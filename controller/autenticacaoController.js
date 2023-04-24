@@ -17,12 +17,7 @@ async function login(req, res) {
 					token = jwt.sign({ id, email }, 'chaveSecreta', { expiresIn: '1h' })
 					const novaData = new Date(Date.now() + (60 * 60 * 1000))
 					let retornoUpdate = await database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
-					console.log(retornoUpdate)
-					if (retornoUpdate) {
-						res.status(200).json({msg: 'Token gerado com sucesso', token})
-					} else {
-						res.status(400).json({msg: 'Houve um problema ao gerar seu token'})
-					}
+					res.status(200).json({msg: 'Token gerado com sucesso', token})
 				}
 			} else{
 				res.status(400).json({msg: 'A senha está incorreta'})
@@ -43,7 +38,7 @@ async function register(req, res) {
 		try {
 			senha = await bcrypt.hash(senha, 10)
 			let resultado = await database.insert({nome, email, senha}).into('usuarios')
-			if (resultado !== 0) {
+			if (resultado.length !== 0) {
 				res.status(201).json({msg: 'Usuario criado com sucesso'})
 			}
 		} catch(erro) {
