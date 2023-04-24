@@ -1,15 +1,13 @@
 const database = require('../database/database')
 
 
-function get(req, res) {
-	database.select('*').from('produtos')
-	.then(produtos => {
+async function get(req, res) {
+	try {
+		let produtos = await database.select('*').from('produtos')
 		res.status(200).json({dados: produtos})
-	})
-	.catch(err => {
+	} catch (erro) {
 		res.status(500).json({msg: 'Houve um problema ao buscar os produtos'})
-		console.error(err)
-	})
+	}	
 }
 
 function getId(req, res) {
