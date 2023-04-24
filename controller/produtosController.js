@@ -67,23 +67,22 @@ async function putId(req, res) {
 	}
 }
 
-function deleteId(req, res) {
+async function deleteId(req, res) {
 	let { id } = req.params
-	
 	if (isNaN(id)) {
 		res.status(400).json({msg: 'Parametro inválido'})
 	} else {
-		database('produtos').where('id', id).del()
-		.then(retorno => {
-			if (retorno !== 0) {
-				res.status(204)
+		try {
+			let retornoDelete = await database('produtos').where('id', id).del()
+			console.log(retornoDelete)
+			if (retornoDelete !== 0) {
+				res.status(200).json({msg: 'Produto deletado com sucesso'})
 			} else {
 				res.status(404).json({msg: 'Esse produto não existe'})
 			}
-		})
-		.catch(err => {
+		} catch (erro) {
 			res.status(500).json({msg: 'Houve um problema ao deletar o produto'})
-		})
+		}
 	}
 }
 
