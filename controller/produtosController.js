@@ -2,7 +2,6 @@ const database = require('../database/database')
 
 
 function get(req, res) {
-	console.log(req.email)
 	database.select('*').from('produtos')
 	.then(produtos => {
 		res.status(200).json({dados: produtos})
