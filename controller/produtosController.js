@@ -35,7 +35,6 @@ async function post(req, res) {
 	} else {
 		try {
 			let retorno = await database.insert({nome, marca, preco}).into('produtos')
-			console.log(retorno)
 			if (retorno.length !== 0) {
 				res.status(201).json({msg: 'Produto inserido com sucesso'})
 			}
