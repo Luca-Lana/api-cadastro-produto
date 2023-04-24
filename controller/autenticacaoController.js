@@ -3,33 +3,36 @@ const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 
 
-function login(req, res) {
+async function login(req, res) {
 	let { email, senha } = req.body
-	database.select('*').from('usuarios').where('email', email)
-	.then(usuario => {
+	try {
+		let usuario = await database.select('*').from('usuarios').where('email', email)
 		if (usuario.length !== 0) {
 			const { id, email, senha: senhaHash, token: tokenBanco, token_expira_em } = usuario[0]
-			const senhaValida = bcrypt.compareSync(senha, senhaHash)
+			const senhaValida = await bcrypt.compare(senha, senhaHash)
 			if (senhaValida) {
 				if (tokenBanco && (Date.now() <= token_expira_em)) {
 					res.status(200).json({token: tokenBanco})
 				} else {
 					token = jwt.sign({ id, email }, 'chaveSecreta', { expiresIn: '1h' })
 					const novaData = new Date(Date.now() + (60 * 60 * 1000))
-					database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
-					.then(retorno => res.status(200).json({msg: 'Token gerado com sucesso', token}))
-					.catch(err => res.status(500).json({msg: 'Houve um problema ao gerar seu token'}))
+					let retornoUpdate = await database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
+					console.log(retornoUpdate)
+					if (retornoUpdate) {
+						res.status(200).json({msg: 'Token gerado com sucesso', token})
+					} else {
+						res.status(400).json({msg: 'Houve um problema ao gerar seu token'})
+					}
 				}
 			} else{
 				res.status(400).json({msg: 'A senha está incorreta'})
 			}
 		} else {
-			res.status(404).json({msg: 'O email está incorreto'})
+			res.status(400).json({msg: 'O email está incorreto'})
 		}
-	})
-	.catch(err => {
-		res.status(500).json({msg: 'Houve um problema ao verificar usuário'})
-	})
+	} catch (erro) {
+		res.status(500).json({msg: 'Houve um problema durante o login'})
+	}
 }
 
 async function register(req, res) {
