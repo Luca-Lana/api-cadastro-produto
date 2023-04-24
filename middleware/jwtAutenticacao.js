@@ -4,7 +4,7 @@ function jwtAutenticacao(req, res, next) {
 	let token = req.headers['authorization'].split(' ')[1]
 	try {
 		let decode = jwt.verify(token,'chaveSecreta')
-		res.email = decode.email
+		req.email = decode.email
 		next()
 	} catch (err) {
 		if(err.message.includes('jwt expired')) {
