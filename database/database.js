@@ -1,11 +1,12 @@
+const env = require('../config')
 const knex = require('knex')({
   client: 'mysql2',
   connection: {
-    host : '127.0.0.1',
-    port : 3306,
-    user : 'root',
-    password : 'root',
-    database : 'cadastro_produto'
+    host : env.DATABASE_HOST,
+    port : env.DATABASE_PORT,
+    user : env.DATABASE_USER,
+    password : env.DATABASE_PASSWORD,
+    database : env.DATABASE_NAME
   }
 })
 
