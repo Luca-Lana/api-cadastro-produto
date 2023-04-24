@@ -32,23 +32,24 @@ function login(req, res) {
 	})
 }
 
-function register(req, res) {
+async function register(req, res) {
 	let {nome, email, senha } = req.body
 	if (!nome || !email || !senha) {
 		res.status(400).json({msg: 'Sua requisição está faltando parâmetros'})
 	} else {
-		senha = bcrypt.hashSync(senha, 10)
-		database.insert({nome, email, senha}).into('usuarios')
-		.then(resultado => {
-			res.status(201).json({msg: 'Usuario criado com sucesso'})
-		})
-		.catch(err => {
-			if(err.message.includes('Duplicate entry')) {
+		try {
+			senha = await bcrypt.hash(senha, 10)
+			let resultado = await database.insert({nome, email, senha}).into('usuarios')
+			if (resultado !== 0) {
+				res.status(201).json({msg: 'Usuario criado com sucesso'})
+			}
+		} catch(erro) {
+			if(erro.message.includes('Duplicate entry')) {
 				res.status(400).json({msg: 'Esse email já existe'})
 			} else {
 				res.status(500).json({msg: 'Houve um problema durante a criação do usuário'})
 			}
-		})
+		}
 	}
 }
 
