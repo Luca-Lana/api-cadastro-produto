@@ -16,7 +16,7 @@ async function login(req, res) {
 				} else {
 					token = jwt.sign({ id, email }, 'chaveSecreta', { expiresIn: '1h' })
 					const novaData = new Date(Date.now() + (60 * 60 * 1000))
-					let retornoUpdate = await database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
+					await database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
 					res.status(200).json({msg: 'Token gerado com sucesso', token})
 				}
 			} else{
