@@ -1,6 +1,6 @@
 const database = require('../database/database')
 const bcrypt = require('bcrypt')
-const jwt = require("jsonwebtoken")
+const jwt = require('jsonwebtoken')
 
 
 async function login(req, res) {
@@ -14,7 +14,7 @@ async function login(req, res) {
 				if (tokenBanco && (Date.now() <= token_expira_em)) {
 					res.status(200).json({token: tokenBanco})
 				} else {
-					token = jwt.sign({ id, email }, 'chaveSecreta', { expiresIn: '1h' })
+					let token = jwt.sign({ id, email }, 'chaveSecreta', { expiresIn: '1h' })
 					const novaData = new Date(Date.now() + (60 * 60 * 1000))
 					await database('usuarios').where('email', email).update({token: token, token_expira_em: novaData.getTime()})
 					res.status(200).json({msg: 'Token gerado com sucesso', token})
