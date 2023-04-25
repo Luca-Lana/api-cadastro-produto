@@ -2,7 +2,7 @@
 
 Esta é uma API de cadastro de produtos, na qual para ter acesso às rotas é necessário se cadastrar e fazer login para receber um token e, em seguida, conseguir acessar as rotas para criar, ler, atualizar e excluir os produtos.
 
-Desenvolvi esse projeto do zero para praticar tudo o que aprendi sobre Node.js, incluindo padrões de projeto, bibliotecas e muito mais. Embora o projeto esteja concluído, continuarei a trabalhar nele para implementar novos recursos ou refatorar o código de maneira mais eficiente à medida que eu for aprendendo mais.d
+Desenvolvi esse projeto do zero para praticar tudo o que aprendi sobre Node.js, incluindo padrões de projeto, bibliotecas e muito mais. Embora o projeto esteja concluído, continuarei a trabalhar nele para implementar novos recursos ou refatorar o código de maneira mais eficiente à medida que eu for aprendendo mais.
 	
 ### 📋 Pré-requisitos
 
