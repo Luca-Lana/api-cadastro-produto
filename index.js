@@ -11,7 +11,7 @@ const produtosRoute = require('./routes/produtosRoute')
 const autenticacaoRoute = require('./routes/autenticacaoRoute')
 
 //MIDDLEWARE
-const jwtAutenticacao = require('./middleware/jwtAutenticacao')
+const jwtAutenticacao = require('./middlewares/jwtAutenticacao')
 
 app.use(autenticacaoRoute)
 
